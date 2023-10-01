@@ -1,4 +1,4 @@
-from .model import Model, convert_date
+from .model import Model, convert_date, safemode
 from requests import Session
 
 
@@ -11,10 +11,13 @@ class Schedule(Model):
         self.activities = LessonUnion
         self.has_homework = bool
         self._session = Session()
-        try:
+        if safemode:
+            try:
+                self._parse_json_response(self._request(auth_token, student_id, date))
+            except Exception as e:
+                self._exception = repr(e)
+        else:
             self._parse_json_response(self._request(auth_token, student_id, date))
-        except Exception as e:
-            self._exception = repr(e)
 
     def _request(self, auth_token, student_id, date):
         response = self._session.get(url=f'{self._base}/schedule',
@@ -57,10 +60,7 @@ class LessonUnion:
     def __init__(self, data):
         self._lessons = [Lesson(item) for item in data if item['type'] == 'LESSON']
 
-    def lesson_at(self, index: int) -> Lesson:
-        return self.__getitem__(index)
-
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Lesson:
         return self._lessons[item]
 
     def __len__(self):
@@ -102,14 +102,11 @@ class MarkUnion:
     def __init__(self, data):
         self._marks = [Mark(item) for item in data]
 
-    def mark_at(self, index: int) -> Mark:
-        return self.__getitem__(index)
-
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Mark:
         return self._marks[item]
 
     def __len__(self):
         return len(self._marks)
 
     def __str__(self):
-        str(self._marks)
+        return str(self._marks)

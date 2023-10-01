@@ -40,4 +40,4 @@ class Profile(Model):
 
     def __str__(self):
         return (f'{self.last_name} {self.first_name} {self.middle_name}: type - {self.type}, student_id - {self.id},'
-                f' phone number - 8{self.phone}, email - {self.email}.')
+                f' phone number - 8{self.phone}, email - {self.email}')
