@@ -1,35 +1,62 @@
-import datetime
 from abc import ABC, abstractmethod
 
 
-safemode = True
+safemode = False
 
 
 class Model(ABC):
-    _url = 'api request url'
-    _raw = 'api raw response'
+    _url = ""
+    _raw = ""
     _exception = False
 
     @abstractmethod
-    def _request(self, **kwargs):
-        """make request to api"""
+    def parse_json_response(self, response):
+        """parse api response"""
 
     @abstractmethod
-    def _parse_json_response(self, response):
-        """parse api response"""
+    def request_url(self):
+        """build request url"""
 
     @property
     def raw_data(self):
         return self._raw
 
     @property
-    def request_url(self):
-        return self._url
-
-    @property
     def api_exception(self):
         return self._exception
 
 
-def convert_date(date: datetime.date):
-    return date.strftime('%Y-%m-%d')
+class CollectionUnion(ABC):
+
+    def __init__(self, data):
+        self._collection = self._parse_data(data)
+
+    @abstractmethod
+    def _parse_data(self, data):
+        pass
+
+    def __len__(self):
+        return len(self._collection)
+
+    @abstractmethod
+    def __getitem__(self, item):
+        pass
+
+    def __str__(self):
+        return str(self._collection)
+
+
+class InvalidOrExpiredTokenError(Exception):
+    def __str__(self):
+        return "Your token is invalid or experied. Try to get a new one"
+
+
+class EthernalApiError(Exception):
+    def __str__(self):
+        return "Response status code is not 200. Please try again later"
+
+
+class WrapperError(Exception):
+    def __str__(self):
+        return (f"Wrapper is crashed, sorry. You can post an issue to my github:\n"
+                f"https://github.com/GGergy/PyMyschoolApi/issues")
