@@ -1,4 +1,4 @@
-from .model import Model, CollectionUnion
+from .model import CollectionUnion, Model
 
 
 class Homework:
@@ -11,9 +11,7 @@ class Homework:
         self.subject_name = response["subject_name"]
 
     def __repr__(self):
-        return (
-            f'"{self.description}, date - {self.date}, subject - {self.subject_name}"'
-        )
+        return f'"{self.description}, date - {self.date}, subject - {self.subject_name}"'
 
 
 class Homeworks(Model):
@@ -27,8 +25,9 @@ class Homeworks(Model):
 
     def request_url(self):
         if not self._url:
-            self._url = (f"{self._base}/homeworks"
-                         f"?student_id={self._student_id}&from={self._date_from}&to={self._date_to}")
+            self._url = (
+                f"{self._base}/homeworks" f"?student_id={self._student_id}&from={self._date_from}&to={self._date_to}"
+            )
         return self._url
 
     def parse_json_response(self, response: dict):

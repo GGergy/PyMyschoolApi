@@ -1,4 +1,4 @@
-from .model import Model, CollectionUnion
+from .model import CollectionUnion, Model
 
 
 class Schedule(Model):
@@ -39,7 +39,7 @@ class Lesson:
         self.subject_id = data["lesson"]["subject_id"]
         self.subject_name = data["lesson"]["subject_name"]
         self.homework = data["lesson"]["homework"]
-        self.replaced = data['lesson']['replaced']
+        self.replaced = data["lesson"]["replaced"]
         self.teacher = Teacher(data["lesson"]["teacher"])
         self.marks = MarkUnion(data["lesson"]["marks"])
 

@@ -27,7 +27,6 @@ class Model(ABC):
 
 
 class CollectionUnion(ABC):
-
     def __init__(self, data):
         self._collection = self._parse_data(data)
 
@@ -58,5 +57,7 @@ class EthernalApiError(Exception):
 
 class WrapperError(Exception):
     def __str__(self):
-        return (f"Wrapper is crashed, sorry. You can post an issue to my github:\n"
-                f"https://github.com/GGergy/PyMyschoolApi/issues")
+        return (
+            "Wrapper is crashed, sorry. You can post an issue to my github:\n"
+            "https://github.com/GGergy/PyMyschoolApi/issues"
+        )

@@ -9,9 +9,7 @@ class ScheduleDay:
         self.lessons = LessonUnion(data["lessons"])
 
     def __repr__(self):
-        return (
-            f'"date - {self.date}, lessons - {len(self.lessons)}"'
-        )
+        return f'"date - {self.date}, lessons - {len(self.lessons)}"'
 
 
 class WeekSchedule(Model):
@@ -24,8 +22,10 @@ class WeekSchedule(Model):
 
     def request_url(self):
         if not self._url:
-            self._url = (f"{self._base}/schedule/short?"
-                         f"dates={'%2C'.join(map(str, self._dates))}&student_id={self._student_id}")
+            self._url = (
+                f"{self._base}/schedule/short?"
+                f"dates={'%2C'.join(map(str, self._dates))}&student_id={self._student_id}"
+            )
         return self._url
 
     def parse_json_response(self, response):
@@ -55,9 +55,7 @@ class Lesson:
         self.lesson_type = data["lesson_type"]
 
     def __repr__(self):
-        return (
-            f"{self.group_name}. begin time - {self.begin_time}. end time - {self.end_time}"
-        )
+        return f"{self.group_name}. begin time - {self.begin_time}. end time - {self.end_time}"
 
 
 class LessonUnion(CollectionUnion):

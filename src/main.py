@@ -2,10 +2,10 @@ import datetime
 
 import requests
 
-from .models.model import safemode, InvalidOrExpiredTokenError, EthernalApiError, WrapperError
+from .models.model import EthernalApiError, InvalidOrExpiredTokenError, WrapperError, safemode
+from .models.homeworks import Homeworks
 from .models.profile import Profile
 from .models.schedule import Schedule
-from .models.homeworks import Homeworks
 from .models.week_shedule import WeekSchedule
 from .token_util import get_new_token
 
@@ -24,11 +24,13 @@ class MyschoolClient:
         return self._request(Schedule(student_id=self.profile.id, date=date))
 
     def get_homework(self, date_from: datetime.date, date_to: datetime.date) -> Homeworks:
-        return self._request(Homeworks(
-            student_id=self.profile.id,
-            date_from=date_from,
-            date_to=date_to,
-        ))
+        return self._request(
+            Homeworks(
+                student_id=self.profile.id,
+                date_from=date_from,
+                date_to=date_to,
+            ),
+        )
 
     def get_shedules_by_dates(self, dates: list[datetime.date]) -> WeekSchedule:
         return self._request(WeekSchedule(student_id=self.profile.id, dates=dates))
@@ -38,7 +40,7 @@ class MyschoolClient:
             self._send_request(model)
         except InvalidOrExpiredTokenError:
             if not safemode:
-                ans = input(f"Invalid token. Do you want to get new one? (Y/n) ")
+                ans = input("Invalid token. Do you want to get new one? (Y/n) ")
                 if ans.lower() == "y":
                     new_token = get_new_token()
                     if new_token:
@@ -62,8 +64,7 @@ class MyschoolClient:
 
     def _send_request(self, model):
         url = model.request_url()
-        response = self._session.get(url=url,
-                                     headers={"Auth-Token": self._token, "X-mes-subsystem": "familyweb"})
+        response = self._session.get(url=url, headers={"Auth-Token": self._token, "X-mes-subsystem": "familyweb"})
         if response.status_code == 401:
             raise InvalidOrExpiredTokenError()
         if response.status_code != 200:
