@@ -68,7 +68,7 @@ class BookAttachment:
 
 
 class AttachmentUnion(CollectionUnion):
-    _attachment_types = {"attachments": FileAttachment, "Book": BookAttachment}
+    _attachment_types = {"attachments": FileAttachment, "book": BookAttachment}
     _data_type = BookAttachment | FileAttachment
 
     def _parse_data(self, data):
