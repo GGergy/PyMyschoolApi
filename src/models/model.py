@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 
 
-safemode = False
-
-
 class Model(ABC):
     _url = ""
     _raw = ""
@@ -56,8 +53,12 @@ class EthernalApiError(Exception):
 
 
 class WrapperError(Exception):
+    def __init__(self, context):
+        self.context = context
+
     def __str__(self):
         return (
             "Wrapper crashed, sorry. You can post an issue to my github:\n"
             "https://github.com/GGergy/PyMyschoolApi/issues"
+            f"Context:\n{self.context}"
         )

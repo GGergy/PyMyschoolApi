@@ -53,7 +53,7 @@ class FileAttachment:
         self.description = data["description"]
 
     def __repr__(self):
-        return self.title
+        return f"File {self.title}, link - {self.link}"
 
 
 class BookAttachment:
@@ -64,17 +64,34 @@ class BookAttachment:
         self.urls = data["urls"]
 
     def __repr__(self):
-        return self.title
+        return f"Book {self.title}"
+
+
+class CDZAttachment:
+    def __init__(self, data):
+        self.type = "cdz"
+        self.title = data["title"]
+        self.description = data["description"]
+        self.urls = data["urls"]
+        self.id = data["id"]
+        # Только для МЭШ
+        self.link = f"https://uchebnik.mos.ru/exam/challenge/{self.id}"
+
+    def __repr__(self):
+        return f"CDZ {self.title}, link - {self.link}"
 
 
 class AttachmentUnion(CollectionUnion):
-    _attachment_types = {"attachments": FileAttachment, "book": BookAttachment}
-    _data_type = BookAttachment | FileAttachment
+    _attachment_types = {"attachments": FileAttachment, "book": BookAttachment, "test_spec_binding": CDZAttachment}
+    _data_type = BookAttachment | FileAttachment | CDZAttachment
 
     def _parse_data(self, data):
         response = []
         for collection in data:
-            a_type = self._attachment_types[collection["type"]]
+            a_type = self._attachment_types.get(collection["type"])
+            if not a_type:
+                response.extend(collection["items"])
+                continue
             response.extend([a_type(item) for item in collection["items"]])
         return response
 

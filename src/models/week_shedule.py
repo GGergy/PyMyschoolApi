@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 from .model import Model, CollectionUnion
 
@@ -15,10 +16,10 @@ class ScheduleDay:
 class WeekSchedule(Model):
     _base = "https://authedu.mosreg.ru/api/family/web/v1"
 
-    def __init__(self, student_id, dates: list[datetime.date]):
+    def __init__(self, student_id, dates: List[datetime.date]):
         self._student_id = student_id
         self._dates = dates
-        self._days = list[ScheduleDay]
+        self._days = List[ScheduleDay]
 
     def request_url(self):
         if not self._url:
