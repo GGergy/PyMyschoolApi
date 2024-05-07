@@ -63,7 +63,9 @@ class MyschoolClient:
 
     def _send_request(self, model):
         url = model.request_url()
-        response = self._session.get(url=url, headers={"Auth-Token": self._token, "X-mes-subsystem": "familyweb"})
+        response = self._session.get(url=url,
+                                     headers={"Auth-Token": self._token,
+                                              "X-mes-subsystem": "familyweb"})
         if response.status_code == 401:
             model._exception = InvalidOrExpiredTokenError
             raise InvalidOrExpiredTokenError()

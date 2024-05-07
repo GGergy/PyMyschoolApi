@@ -45,7 +45,8 @@ class Lesson:
 
     def __repr__(self):
         return (
-            f'"{self.info}. begin time - {self.begin_time}. end time - {self.end_time}. teacher - {self.teacher}.'
+            f'"{self.info}. name - {self.subject_name}. begin time - {self.begin_time}.'
+            f' end time - {self.end_time}. teacher - {self.teacher}.'
             f' room number - {self.room_number}"'
         )
 
